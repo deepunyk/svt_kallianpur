@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:svt_kallianpur/screens/about_screen.dart';
+import 'package:svt_kallianpur/screens/circular_screen.dart';
 import 'package:svt_kallianpur/screens/deities_detail_screen.dart';
+import 'package:svt_kallianpur/screens/event_screen.dart';
 import 'package:svt_kallianpur/screens/feed_screen.dart';
 import 'package:svt_kallianpur/screens/gallery_detail_screen.dart';
 import 'package:svt_kallianpur/screens/gallery_display_image_screen.dart';
 import 'package:svt_kallianpur/screens/gallery_screen.dart';
 import 'package:svt_kallianpur/screens/home_screen.dart';
+import 'package:svt_kallianpur/screens/pdf_view_screen.dart';
 import 'package:svt_kallianpur/screens/seva_screen.dart';
 import 'package:svt_kallianpur/screens/splash_screen.dart';
 
@@ -38,9 +41,11 @@ class MyApp extends StatelessWidget {
         SevaScreen.routeName: (ctx) => SevaScreen(),
         GalleryScreen.routeName: (ctx) => GalleryScreen(),
         GalleryDetailScreen.routeName: (ctx) => GalleryDetailScreen(),
-        GalleryDisplayImageScreen.routeName: (ctx) =>
-            GalleryDisplayImageScreen(),
+        GalleryDisplayImageScreen.routeName: (ctx) => GalleryDisplayImageScreen(),
         DeitiesDetailScreen.routeName: (ctx) => DeitiesDetailScreen(),
+        EventScreen.routeName: (ctx) => EventScreen(),
+        CircularScreen.routeName :(ctx) => CircularScreen(),
+        PDFViewScreen.routeName :(ctx)=> PDFViewScreen(),
       },
     );
   }

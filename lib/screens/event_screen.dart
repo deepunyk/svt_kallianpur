@@ -2,30 +2,31 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class SevaScreen extends StatefulWidget {
-  static const routeName = "/seva";
+class EventScreen extends StatefulWidget {
+  static const routeName = "/event";
 
   @override
-  _SevaScreenState createState() => _SevaScreenState();
+  _EventScreenState createState() => _EventScreenState();
 }
 
-class _SevaScreenState extends State<SevaScreen> {
-  List sevaList = [];
+class _EventScreenState extends State<EventScreen> {
+  List eventList = [];
   bool isLoad = true;
 
   @override
   void initState() {
     super.initState();
-    _getSevas();
+    _getEvents();
   }
 
-  _getSevas() async {
+  _getEvents() async {
     final response = await http.post(
-        "http://svtkallianpur.com/wp-content/php/getSevas.php", body: {
+        "http://svtkallianpur.com/wp-content/php/getEvents.php", body: {
     });
     final jsonRespone = json.decode(response.body);
-    sevaList = jsonRespone['sevas'].cast<Map<String, dynamic>>();
+    eventList = jsonRespone['events'].cast<Map<String, dynamic>>();
     setState(() {
       isLoad = false;
     });
@@ -39,19 +40,21 @@ class _SevaScreenState extends State<SevaScreen> {
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         backgroundColor: Colors.white,
         title: Text(
-          "Seva Details",
+          "Event Details",
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
       body: Container(
         child: isLoad ? Center(child: CircularProgressIndicator(),):ListView.builder(
-          itemCount: sevaList.length,
+          itemCount: eventList.length,
           itemBuilder: (context, index) {
+            DateTime _date = DateTime.parse(eventList[index]["date"]);
             return Card(
                 child: ListTile(
-                  title: Text(sevaList[index]["name"]),
-                  trailing: Text(sevaList[index]["cost"]),
-            ));
+                  title: Text(eventList[index]["name"]),
+                  trailing: Text(DateFormat("dd-MM-yyyy").format(_date)),
+                  subtitle: Text(DateFormat("h:mm a").format(_date)),
+                ));
           },
         ),
       ),

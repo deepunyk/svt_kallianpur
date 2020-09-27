@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:svt_kallianpur/screens/circular_screen.dart';
+import 'package:svt_kallianpur/screens/event_screen.dart';
 import 'package:svt_kallianpur/screens/gallery_screen.dart';
 import 'package:svt_kallianpur/screens/seva_screen.dart';
 import 'package:svt_kallianpur/widgets/contact.dart';
@@ -33,18 +35,39 @@ class HomeBody extends StatelessWidget {
       delegate: SliverChildListDelegate([
         Container(
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Column(
             children: [
-              topCardWidget("Gallery", Icons.image, () {
-                Navigator.of(context).pushNamed(GalleryScreen.routeName);
-              }, context),
-              const SizedBox(
-                width: 16,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  topCardWidget("Gallery", Icons.image, () {
+                    Navigator.of(context).pushNamed(GalleryScreen.routeName);
+                  }, context),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  topCardWidget("Seva List", Icons.list, () {
+                    Navigator.of(context).pushNamed(SevaScreen.routeName);
+                  }, context),
+                ],
               ),
-              topCardWidget("Seva List", Icons.list, () {
-                Navigator.of(context).pushNamed(SevaScreen.routeName);
-              }, context),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    topCardWidget("Events", Icons.event_available, () {
+                      Navigator.of(context).pushNamed(EventScreen.routeName);
+                    }, context),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    topCardWidget("Circulars", Icons.note, () {
+                      Navigator.of(context).pushNamed(CircularScreen.routeName);
+                    }, context),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
