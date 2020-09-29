@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:svt_kallianpur/screens/pdf_view_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class CircularScreen extends StatefulWidget {
   static const routeName = "/circular";
@@ -15,6 +18,8 @@ class CircularScreen extends StatefulWidget {
 class _CircularScreenState extends State<CircularScreen> {
   List circularList = [];
   bool isLoad = true;
+  bool _initialized = false;
+  bool _error = false;
 
   @override
   void initState() {
@@ -49,10 +54,12 @@ class _CircularScreenState extends State<CircularScreen> {
         child: isLoad ? Center(child: CircularProgressIndicator(),):ListView.builder(
           itemCount: circularList.length,
           itemBuilder: (context, index) {
+            DateTime _date = DateTime.parse(circularList[index]["date"]);
             return Card(
                 child: ListTile(
                   title: Text(circularList[index]["title"]),
-                  subtitle: Text(circularList[index]["description"]),
+                  subtitle: Text(DateFormat("dd-MM-yyyy").format(_date)),
+                  trailing: Icon(Icons.picture_as_pdf,color: Theme.of(context).primaryColor,),
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(PDFViewScreen.routeName, arguments: circularList[index]["url"]);

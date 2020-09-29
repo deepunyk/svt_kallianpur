@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "500662645185",
+    "firebase_url": "https://svtk-b099f.firebaseio.com",
+    "project_id": "svtk-b099f",
+    "storage_bucket": "svtk-b099f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500662645185:android:99686c7120d263c591ff40",
+        "android_client_info": {
+          "package_name": "com.xti.svt_kallianpur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500662645185-9ohl5p2e9fjn905dl2un5eof8a5eeosg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzHAziIqrI7AA91vUfv2UXXCtiRi3GXPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500662645185-9ohl5p2e9fjn905dl2un5eof8a5eeosg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

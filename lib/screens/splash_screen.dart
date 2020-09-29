@@ -1,4 +1,5 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:svt_kallianpur/screens/home_screen.dart';
@@ -34,6 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkConnection() async {
+    final fbm = FirebaseMessaging();
+    fbm.subscribeToTopic('notify');
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       Future.delayed(const Duration(milliseconds: 1000), () {
