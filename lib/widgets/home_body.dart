@@ -19,7 +19,12 @@ class HomeBody extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text(title), Icon(iconData)],
+              children: [
+                Text(
+                  title,
+                ),
+                Icon(iconData)
+              ],
             ),
           ),
         ),
@@ -62,9 +67,31 @@ class HomeBody extends StatelessWidget {
                     const SizedBox(
                       width: 16,
                     ),
-                    topCardWidget("Circulars", Icons.note, () {
-                      Navigator.of(context).pushNamed(CircularScreen.routeName);
-                    }, context),
+                    Flexible(
+                      flex: 1,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(CircularScreen.routeName);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Announcements",style: TextStyle(fontSize: 12),
+                                ),
+                                Icon(Icons.note)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

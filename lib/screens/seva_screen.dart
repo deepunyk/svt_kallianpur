@@ -50,7 +50,7 @@ class _SevaScreenState extends State<SevaScreen> {
             return Card(
                 child: ListTile(
                   title: Text(sevaList[index]["name"]),
-                  trailing: Text(sevaList[index]["cost"]),
+                  trailing: Text('₹'+sevaList[index]["cost"]),
             ));
           },
         ),

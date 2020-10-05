@@ -20,6 +20,8 @@ class _CircularScreenState extends State<CircularScreen> {
   bool isLoad = true;
   bool _initialized = false;
   bool _error = false;
+  DateTime date =DateTime.now();
+  int count=0;
 
   @override
   void initState() {
@@ -35,6 +37,14 @@ class _CircularScreenState extends State<CircularScreen> {
     circularList = jsonRespone['circulars'].cast<Map<String, dynamic>>();
     setState(() {
       isLoad = false;
+      for(int i=0;i<circularList.length;i++){
+        var today_date=int.parse(DateFormat("d").format(DateTime.parse(circularList[i]["date"])));
+        var today_month=int.parse(DateFormat("M").format(DateTime.parse(circularList[i]["date"])));
+        var today_year=int.parse(DateFormat("y").format(DateTime.parse(circularList[i]["date"])));
+        if(DateTime(today_year, today_month, today_date).difference(DateTime(date.year, date.month, date.day)).inDays >= 0){
+          count++;
+        }
+      }
     });
   }
 
@@ -46,13 +56,13 @@ class _CircularScreenState extends State<CircularScreen> {
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         backgroundColor: Colors.white,
         title: Text(
-          "Circular Details",
+          "Announcements",
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
-      body: Container(
+      body: (count!=0)?Container(
         child: isLoad ? Center(child: CircularProgressIndicator(),):ListView.builder(
-          itemCount: circularList.length,
+          itemCount: count,
           itemBuilder: (context, index) {
             DateTime _date = DateTime.parse(circularList[index]["date"]);
             return Card(
@@ -67,7 +77,7 @@ class _CircularScreenState extends State<CircularScreen> {
                 ));
           },
         ),
-      ),
+      ):Center(child: Text('No Announcements yet',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 25),),),
     );
   }
 }

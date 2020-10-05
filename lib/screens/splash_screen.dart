@@ -14,6 +14,24 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool check = false;
 
+  @override
+  void initState() {
+    final fbm = FirebaseMessaging();
+    fbm.requestNotificationPermissions();
+    fbm.configure(onMessage: (msg) {
+      print(msg);
+      return;
+    }, onLaunch: (msg) {
+      print(msg);
+      return;
+    }, onResume: (msg) {
+      print(msg);
+      return;
+    });
+    fbm.subscribeToTopic('notify');
+    super.initState();
+  }
+
   _showDialog() {
     showDialog(
         context: context,
@@ -35,8 +53,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkConnection() async {
-    final fbm = FirebaseMessaging();
-    fbm.subscribeToTopic('notify');
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       Future.delayed(const Duration(milliseconds: 1000), () {
