@@ -20,8 +20,8 @@ class _CircularScreenState extends State<CircularScreen> {
   bool isLoad = true;
   bool _initialized = false;
   bool _error = false;
-  DateTime date =DateTime.now();
-  int count=0;
+  DateTime date = DateTime.now();
+  int count = 0;
 
   @override
   void initState() {
@@ -31,17 +31,23 @@ class _CircularScreenState extends State<CircularScreen> {
 
   _getCirculars() async {
     final response = await http.post(
-        "http://svtkallianpur.com/wp-content/php/getCirculars.php", body: {
-    });
+        "http://svtkallianpur.com/wp-content/php/getCirculars.php",
+        body: {});
     final jsonRespone = json.decode(response.body);
     circularList = jsonRespone['circulars'].cast<Map<String, dynamic>>();
     setState(() {
       isLoad = false;
-      for(int i=0;i<circularList.length;i++){
-        var today_date=int.parse(DateFormat("d").format(DateTime.parse(circularList[i]["date"])));
-        var today_month=int.parse(DateFormat("M").format(DateTime.parse(circularList[i]["date"])));
-        var today_year=int.parse(DateFormat("y").format(DateTime.parse(circularList[i]["date"])));
-        if(DateTime(today_year, today_month, today_date).difference(DateTime(date.year, date.month, date.day)).inDays >= 0){
+      for (int i = 0; i < circularList.length; i++) {
+        var today_date = int.parse(
+            DateFormat("d").format(DateTime.parse(circularList[i]["date"])));
+        var today_month = int.parse(
+            DateFormat("M").format(DateTime.parse(circularList[i]["date"])));
+        var today_year = int.parse(
+            DateFormat("y").format(DateTime.parse(circularList[i]["date"])));
+        if (DateTime(today_year, today_month, today_date)
+                .difference(DateTime(date.year, date.month, date.day))
+                .inDays >=
+            0) {
           count++;
         }
       }
@@ -60,24 +66,41 @@ class _CircularScreenState extends State<CircularScreen> {
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
-      body: (count!=0)?Container(
-        child: isLoad ? Center(child: CircularProgressIndicator(),):ListView.builder(
-          itemCount: count,
-          itemBuilder: (context, index) {
-            DateTime _date = DateTime.parse(circularList[index]["date"]);
-            return Card(
-                child: ListTile(
-                  title: Text(circularList[index]["title"]),
-                  subtitle: Text(DateFormat("dd-MM-yyyy").format(_date)),
-                  trailing: Icon(Icons.picture_as_pdf,color: Theme.of(context).primaryColor,),
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(PDFViewScreen.routeName, arguments: circularList[index]["url"]);
-                  },
-                ));
-          },
-        ),
-      ):Center(child: Text('No Announcements yet',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 25),),),
+      body: isLoad
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : (count != 0)
+              ? Container(
+                  child: ListView.builder(
+                    itemCount: count,
+                    itemBuilder: (context, index) {
+                      DateTime _date =
+                          DateTime.parse(circularList[index]["date"]);
+                      return Card(
+                          child: ListTile(
+                        title: Text(circularList[index]["title"]),
+                        subtitle: Text(DateFormat("dd-MM-yyyy").format(_date)),
+                        trailing: Icon(
+                          Icons.picture_as_pdf,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                              PDFViewScreen.routeName,
+                              arguments: circularList[index]["url"]);
+                        },
+                      ));
+                    },
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    'No Announcements yet',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 25),
+                  ),
+                ),
     );
   }
 }

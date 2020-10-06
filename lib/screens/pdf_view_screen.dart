@@ -40,7 +40,7 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
       appBar: AppBar(
         titleSpacing: 0,
         title: Text(
-          "PDF View",
+          "Announcement",
           style: TextStyle(color: _color),
         ),
         backgroundColor: Colors.white,
