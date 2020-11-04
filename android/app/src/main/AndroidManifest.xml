@@ -13,7 +13,6 @@
 
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="SVT Kallianpur"
         android:icon="@mipmap/ic_launcher">
 

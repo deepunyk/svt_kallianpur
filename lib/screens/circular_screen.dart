@@ -34,23 +34,19 @@ class _CircularScreenState extends State<CircularScreen> {
         "http://svtkallianpur.com/wp-content/php/getCirculars.php",
         body: {});
     final jsonRespone = json.decode(response.body);
-    circularList = jsonRespone['circulars'].cast<Map<String, dynamic>>();
+    List allList = jsonRespone['circulars'].cast<Map<String, dynamic>>();
+    print(allList);
+    allList.map((e) {
+      print(e["date"]);
+      if (DateTime.parse(e["date"]).isAfter(DateTime.now())) {
+        circularList.add(e);
+      }
+    }).toList();
+    circularList.sort((a, b) =>
+        DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"])));
+
     setState(() {
       isLoad = false;
-      for (int i = 0; i < circularList.length; i++) {
-        var today_date = int.parse(
-            DateFormat("d").format(DateTime.parse(circularList[i]["date"])));
-        var today_month = int.parse(
-            DateFormat("M").format(DateTime.parse(circularList[i]["date"])));
-        var today_year = int.parse(
-            DateFormat("y").format(DateTime.parse(circularList[i]["date"])));
-        if (DateTime(today_year, today_month, today_date)
-                .difference(DateTime(date.year, date.month, date.day))
-                .inDays >=
-            0) {
-          count++;
-        }
-      }
     });
   }
 
@@ -70,10 +66,10 @@ class _CircularScreenState extends State<CircularScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : (count != 0)
+          : (circularList.length != 0)
               ? Container(
                   child: ListView.builder(
-                    itemCount: count,
+                    itemCount: circularList.length,
                     itemBuilder: (context, index) {
                       DateTime _date =
                           DateTime.parse(circularList[index]["date"]);

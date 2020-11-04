@@ -27,23 +27,31 @@ class _EventScreenState extends State<EventScreen> {
     final response = await http
         .post("http://svtkallianpur.com/wp-content/php/getEvents.php");
     final jsonRespone = json.decode(response.body);
-    eventList = jsonRespone['events'];
+    List allList = jsonRespone['events'];
+    allList.map((e) {
+      if (DateTime.parse(e["date"]).isAfter(DateTime.now())) {
+        eventList.add(e);
+      }
+    }).toList();
+    eventList.sort((a, b) =>
+        DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"])));
+    print(eventList);
     setState(() {
       isLoad = false;
-      for (int i = 0; i < eventList.length; i++) {
-        var today_date = int.parse(
-            DateFormat("d").format(DateTime.parse(eventList[i]["date"])));
-        var today_month = int.parse(
-            DateFormat("M").format(DateTime.parse(eventList[i]["date"])));
-        var today_year = int.parse(
-            DateFormat("y").format(DateTime.parse(eventList[i]["date"])));
-        if (DateTime(today_year, today_month, today_date)
-                .difference(DateTime(date.year, date.month, date.day))
-                .inDays >=
-            0) {
-          count++;
-        }
-      }
+      // for (int i = 0; i < eventList.length; i++) {
+      //   var today_date = int.parse(
+      //       DateFormat("d").format(DateTime.parse(eventList[i]["date"])));
+      //   var today_month = int.parse(
+      //       DateFormat("M").format(DateTime.parse(eventList[i]["date"])));
+      //   var today_year = int.parse(
+      //       DateFormat("y").format(DateTime.parse(eventList[i]["date"])));
+      //   if (DateTime(today_year, today_month, today_date)
+      //           .difference(DateTime(date.year, date.month, date.day))
+      //           .inDays >=
+      //       0) {
+      //     count++;
+      //   }
+      // }
     });
   }
 
@@ -64,16 +72,16 @@ class _EventScreenState extends State<EventScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : (count != 0)
+            : (eventList.length != 0)
                 ? ListView.builder(
-                    itemCount: count,
+                    itemCount: eventList.length,
                     itemBuilder: (context, index) {
                       DateTime _date = DateTime.parse(eventList[index]["date"]);
                       return Card(
                           child: ListTile(
                         title: Text(eventList[index]["name"]),
                         trailing: Text(DateFormat("dd-MM-yyyy").format(_date)),
-                        subtitle: Text(DateFormat("h:mm a").format(_date)),
+                        //subtitle: Text(DateFormat("h:mm a").format(_date)),
                       ));
                     },
                   )

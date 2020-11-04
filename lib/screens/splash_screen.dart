@@ -54,6 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   checkConnection() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
+
     if (connectivityResult == ConnectivityResult.mobile) {
       Future.delayed(const Duration(milliseconds: 1000), () {
         Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
@@ -84,6 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Container(
               child: CircleAvatar(
+                backgroundColor: Colors.transparent,
                 backgroundImage: AssetImage("assets/images/logo.jpg"),
                 radius: _mediaQuery.width * 0.15,
               ),

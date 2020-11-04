@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SevaScreen extends StatefulWidget {
   static const routeName = "/seva";
@@ -21,9 +21,8 @@ class _SevaScreenState extends State<SevaScreen> {
   }
 
   _getSevas() async {
-    final response = await http.post(
-        "http://svtkallianpur.com/wp-content/php/getSevas.php", body: {
-    });
+    final response = await http
+        .post("http://svtkallianpur.com/wp-content/php/getSevas.php", body: {});
     final jsonRespone = json.decode(response.body);
     sevaList = jsonRespone['sevas'].cast<Map<String, dynamic>>();
     setState(() {
@@ -44,16 +43,21 @@ class _SevaScreenState extends State<SevaScreen> {
         ),
       ),
       body: Container(
-        child: isLoad ? Center(child: CircularProgressIndicator(),):ListView.builder(
-          itemCount: sevaList.length,
-          itemBuilder: (context, index) {
-            return Card(
-                child: ListTile(
-                  title: Text(sevaList[index]["name"]),
-                  trailing: Text('₹'+sevaList[index]["cost"]),
-            ));
-          },
-        ),
+        child: isLoad
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                itemCount: sevaList.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                      child: ListTile(
+                    title: Text(sevaList[index]["name"]),
+                    trailing: Text('₹' +
+                        int.parse(sevaList[index]["cost"]).toStringAsFixed(2)),
+                  ));
+                },
+              ),
       ),
     );
   }

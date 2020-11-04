@@ -15,11 +15,11 @@ import 'package:svt_kallianpur/screens/pdf_view_screen.dart';
 import 'package:svt_kallianpur/screens/seva_screen.dart';
 import 'package:svt_kallianpur/screens/splash_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-  );
+      );
   runApp(MyApp());
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SVT Kallianpur',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Color(0xff650D01),
@@ -47,11 +47,12 @@ class MyApp extends StatelessWidget {
         SevaScreen.routeName: (ctx) => SevaScreen(),
         GalleryScreen.routeName: (ctx) => GalleryScreen(),
         GalleryDetailScreen.routeName: (ctx) => GalleryDetailScreen(),
-        GalleryDisplayImageScreen.routeName: (ctx) => GalleryDisplayImageScreen(),
+        GalleryDisplayImageScreen.routeName: (ctx) =>
+            GalleryDisplayImageScreen(),
         DeitiesDetailScreen.routeName: (ctx) => DeitiesDetailScreen(),
         EventScreen.routeName: (ctx) => EventScreen(),
-        CircularScreen.routeName :(ctx) => CircularScreen(),
-        PDFViewScreen.routeName :(ctx)=> PDFViewScreen(),
+        CircularScreen.routeName: (ctx) => CircularScreen(),
+        PDFViewScreen.routeName: (ctx) => PDFViewScreen(),
       },
     );
   }
