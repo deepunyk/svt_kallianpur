@@ -14,24 +14,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool check = false;
 
-  @override
-  void initState() {
-    final fbm = FirebaseMessaging();
-    fbm.requestNotificationPermissions();
-    fbm.configure(onMessage: (msg) {
-      print(msg);
-      return;
-    }, onLaunch: (msg) {
-      print(msg);
-      return;
-    }, onResume: (msg) {
-      print(msg);
-      return;
-    });
-    fbm.subscribeToTopic('notify');
-    super.initState();
-  }
-
   _showDialog() {
     showDialog(
         context: context,
@@ -55,12 +37,15 @@ class _SplashScreenState extends State<SplashScreen> {
   checkConnection() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
 
+    FirebaseMessaging fbm = FirebaseMessaging();
+    await fbm.requestNotificationPermissions();
+    await fbm.subscribeToTopic('notify');
     if (connectivityResult == ConnectivityResult.mobile) {
-      Future.delayed(const Duration(milliseconds: 1000), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
       });
     } else if (connectivityResult == ConnectivityResult.wifi) {
-      Future.delayed(const Duration(milliseconds: 1000), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
       });
     } else {

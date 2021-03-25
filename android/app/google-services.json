@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "500662645185-pgvoafjqn33hd8h6hc5avfed4o1g6d5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xti.svt_kallianpur",
+            "certificate_hash": "9f5ae46479145fe32d41179699c82b301c842b0f"
+          }
+        },
+        {
+          "client_id": "500662645185-pv5cavp5iemrp2hk89ri5j2e56ml4s1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xti.svt_kallianpur",
+            "certificate_hash": "781939aa12719b077f6e8d7df43a35e92a23bbfa"
+          }
+        },
+        {
           "client_id": "500662645185-9ohl5p2e9fjn905dl2un5eof8a5eeosg.apps.googleusercontent.com",
           "client_type": 3
         }

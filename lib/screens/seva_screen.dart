@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class SevaScreen extends StatefulWidget {
   static const routeName = "/seva";
@@ -47,16 +48,53 @@ class _SevaScreenState extends State<SevaScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
-                itemCount: sevaList.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                      child: ListTile(
-                    title: Text(sevaList[index]["name"]),
-                    trailing: Text('₹' +
-                        int.parse(sevaList[index]["cost"]).toStringAsFixed(2)),
-                  ));
-                },
+            : Stack(
+                children: [
+                  Container(
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(bottom: 100),
+                      itemCount: sevaList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                            child: ListTile(
+                          title: Text(sevaList[index]["name"]),
+                          trailing: Text(
+                            '₹' +
+                                int.parse(sevaList[index]["cost"])
+                                    .toStringAsFixed(2),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ));
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 24),
+                      child: RaisedButton(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        color: Theme.of(context).primaryColor,
+                        onPressed: () async {
+                          String url =
+                              "http://svtkallianpur.com/product/online-kanike/";
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        child: Text(
+                          "Online Kanike",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
       ),
     );

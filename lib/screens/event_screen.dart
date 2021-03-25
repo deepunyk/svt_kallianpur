@@ -89,7 +89,7 @@ class _EventScreenState extends State<EventScreen> {
                     child: Text(
                       'No Events yet',
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 25),
+                          color: Theme.of(context).primaryColor, fontSize: 22),
                     ),
                   ),
       ),

@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,9 +17,9 @@ import 'package:svt_kallianpur/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      debug: true // optional: set false to disable printing logs to console
-      );
+  await FlutterDownloader.initialize();
+  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 

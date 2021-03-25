@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:svt_kallianpur/data/urlData.dart';
+import 'package:svt_kallianpur/model/gallery.dart';
 import 'package:svt_kallianpur/screens/gallery_display_image_screen.dart';
 import 'package:svt_kallianpur/widgets/loading.dart';
 
@@ -16,24 +17,26 @@ class GalleryDetailScreen extends StatefulWidget {
 
 class _GalleryDetailScreenState extends State<GalleryDetailScreen> {
   bool _isLoad = true;
-  List _galleryList = [];
-  String name = "";
-  String folderName = "";
+  List<Photo> photos = [];
   bool _check = false;
+  Gallery gallery;
 
   getData() async {
-    final response = await http.post(
-        "http://svtkallianpur.com/wp-content/getGalleryPhotos.php",
-        body: {"folder": "gallery/$folderName/"});
+    final response = await http.get(
+      "http://svtkallianpur.com/wp-content/php/getWPPhotos.php?gid=${gallery.gid}",
+    );
     final jsonResponse = json.decode(response.body);
-    _galleryList = jsonResponse['images'];
+    jsonResponse.map((e) => photos.add(Photo.fromJson(e))).toList();
+
     setState(() {
       _isLoad = false;
     });
   }
 
   String getImageUrl(int index) {
-    return UrlData.galleryDetailUrl + _galleryList[index];
+    String imgName = photos[index].filename;
+    String folderName = gallery.path;
+    return UrlData.galleryFolderUrl + folderName + imgName;
   }
 
   Widget galleryCard(int index) {
@@ -41,7 +44,7 @@ class _GalleryDetailScreenState extends State<GalleryDetailScreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(GalleryDisplayImageScreen.routeName,
-              arguments: [index, _galleryList, name]);
+              arguments: [index, photos, gallery]);
         },
         child: Hero(
           tag: "${getImageUrl(index)}",
@@ -63,11 +66,9 @@ class _GalleryDetailScreenState extends State<GalleryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context).settings.arguments as List;
+    gallery = ModalRoute.of(context).settings.arguments;
 
     if (!_check) {
-      folderName = arg[0];
-      name = arg[1];
       _check = true;
       getData();
     }
@@ -78,7 +79,7 @@ class _GalleryDetailScreenState extends State<GalleryDetailScreen> {
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         backgroundColor: Colors.white,
         title: Text(
-          "$name",
+          gallery.title,
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
@@ -86,7 +87,7 @@ class _GalleryDetailScreenState extends State<GalleryDetailScreen> {
           ? Loading()
           : Container(
               child: GridView.builder(
-                  itemCount: _galleryList.length,
+                  itemCount: photos.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {

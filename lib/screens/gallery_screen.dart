@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:svt_kallianpur/data/urlData.dart';
+import 'package:svt_kallianpur/model/gallery.dart';
 import 'package:svt_kallianpur/screens/gallery_detail_screen.dart';
 import 'package:svt_kallianpur/widgets/loading.dart';
 
@@ -16,22 +17,25 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   bool _isLoad = true;
-  List _galleryList = [];
+  List<Gallery> galleries = [];
+  List<Gallery> filteredGallery = [];
+  bool isSearch = false;
 
   getData() async {
     final response = await http
-        .get("http://svtkallianpur.com/wp-content/getGalleryFolders.php");
+        .get("http://svtkallianpur.com/wp-content/php/getWPGallery.php");
     final jsonResponse = json.decode(response.body);
-    _galleryList = jsonResponse['gallery'];
+    jsonResponse.map((e) => galleries.add(Gallery.fromJson(e))).toList();
+    filteredGallery = [...galleries];
     setState(() {
       _isLoad = false;
     });
   }
 
   String getImageUrl(int index) {
-    String imgName = _galleryList[index]['prev_image'];
-    String folderName = _galleryList[index]['folder_name'];
-    return UrlData.galleryFolderUrl + folderName + "/" + imgName;
+    String imgName = galleries[index].filename;
+    String folderName = galleries[index].path;
+    return UrlData.galleryFolderUrl + folderName + imgName;
   }
 
   Widget galleryCard(int index) {
@@ -39,10 +43,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(GalleryDetailScreen.routeName,
-              arguments: [
-                _galleryList[index]['folder_name'],
-                _galleryList[index]['name']
-              ]);
+              arguments: filteredGallery[index]);
         },
         child: Column(
           children: [
@@ -56,7 +57,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
               child: Text(
-                "${_galleryList[index]['name']}",
+                "${filteredGallery[index].title}",
                 textAlign: TextAlign.center,
               ),
             ),
@@ -64,6 +65,21 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ),
       ),
     );
+  }
+
+  filterGallery(String val) {
+    print(galleries.length);
+    print(filteredGallery.length);
+    filteredGallery.clear();
+    galleries.map((e) {
+      String title = e.title.toLowerCase();
+      val = val.toLowerCase();
+      print(title);
+      if (title.contains(val)) {
+        filteredGallery.add(e);
+      }
+    }).toList();
+    setState(() {});
   }
 
   @override
@@ -80,16 +96,63 @@ class _GalleryScreenState extends State<GalleryScreen> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         backgroundColor: Colors.white,
-        title: Text(
-          "Gallery",
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
+        title: isSearch
+            ? Container(
+                child: TextField(
+                  decoration:
+                      InputDecoration.collapsed(hintText: "Enter event name"),
+                  autofocus: true,
+                  onChanged: (val) {
+                    filterGallery(val);
+                  },
+                ),
+              )
+            : Text(
+                "Gallery",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+        actions: [
+          !isSearch
+              ? InkWell(
+                  borderRadius: BorderRadius.circular(15),
+                  onTap: () {
+                    isSearch = true;
+                    setState(() {});
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    child: Icon(
+                      Icons.search,
+                      size: 28,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                )
+              : InkWell(
+                  borderRadius: BorderRadius.circular(15),
+                  onTap: () {
+                    filterGallery('');
+                    isSearch = false;
+                    setState(() {});
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    child: Icon(
+                      Icons.close,
+                      size: 28,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+        ],
       ),
       body: _isLoad
           ? Loading()
           : Container(
               child: GridView.builder(
-                  itemCount: _galleryList.length,
+                  itemCount: filteredGallery.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
